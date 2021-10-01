@@ -1,5 +1,5 @@
 #pragma once
-struct global_settings
+struct global_variables
 {
 	int screenWidith = 800;
 	int screenHeight = 600;
