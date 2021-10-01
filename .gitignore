@@ -1,0 +1,15 @@
+  #skip everything in .vs directory without linker settings
+!.vs/
+.vs/*
+!.vs/Judy_renderer/
+.vs/Judy_renderer/*
+!.vs/Judy_renderer/v16/
+.vs/Judy_renderer/v16/*
+!.vs/Judy_renderer/v16/.suo
+
+
+#skip debug
+Judy_renderer/Debug/
+Debug/
+Judy_renderer/x64/
+x64/
