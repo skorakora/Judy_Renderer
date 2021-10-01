@@ -4,7 +4,7 @@
 int main(void)
 {
     GLFWwindow* window;
-    global_settings global;
+    global_variables global;
 
 
     /* Initialize the library */
