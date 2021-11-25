@@ -1,13 +1,17 @@
 ﻿#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <vector>
+#include <algorithm>
 #include "Globals.h"
-#include "Shaders.h"
+#include "RendererShaders.h"
 
 int main(void)
 {
+	std::cout << "Starting Konkol Engine please wait..." << std::endl;
+	std::cout << "Initializing: Judy Renderer..." << std::endl;
 	GLFWwindow* window;
 	global_variables global;
-	renderer_shaders shader;
+	RendererShaders shaders;
 
 
 
@@ -32,6 +36,10 @@ int main(void)
 	{
 		return -1;
 	}
+
+	std::cout << "Loading shaders" << std::endl;
+	shaders.LoadShaders(); //loads shaders to memory
+
 
 
 	float vertices1[] = {
@@ -61,21 +69,50 @@ int main(void)
 	
 
 
+	std::string tect2 = shaders.GetFragmentShader(std::string("main"));
+	const char* mainFragmentShader = tect2.c_str();
+	std::string tect = shaders.GetVertexShader(std::string("main"));
+	const char* mainVertexShader = tect.c_str();
+
+
+	GLint result = GL_FALSE;
+	int logLength;
+
+	std::cout << "Compiling shaders: please wait..." << std::endl;
+	
 	unsigned int vertexShader;
 	vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	glShaderSource(vertexShader, 1, &shader.vertexShaderSource, NULL);
+	glShaderSource(vertexShader, 1, &mainVertexShader , NULL);
 	glCompileShader(vertexShader);
 
 
+	//chceck shader
+
+	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(vertexShader, GL_INFO_LOG_LENGTH, &logLength);
+	std::vector<GLchar> vertShaderError((logLength > 1) ? logLength : 1);
+	glGetShaderInfoLog(vertexShader, logLength, NULL, &vertShaderError[0]);
+	std::cout << &vertShaderError[0] << std::endl;
+
+	//
 	unsigned int fragmentShader;
 	fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader, 1, &shader.fragmentShaderSource, NULL);
+	glShaderSource(fragmentShader, 1, &mainFragmentShader, NULL);
 	glCompileShader(fragmentShader);
 
 
+
+	// Check fragment shader
+
+	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &result);
+	glGetShaderiv(fragmentShader, GL_INFO_LOG_LENGTH, &logLength);
+	std::vector<GLchar> fragShaderError((logLength > 1) ? logLength : 1);
+	glGetShaderInfoLog(fragmentShader, logLength, NULL, &fragShaderError[0]);
+	std::cout << &fragShaderError[0] << std::endl;
+
 	unsigned int fragmentShader1;
 	fragmentShader1 = glCreateShader(GL_FRAGMENT_SHADER);
-	glShaderSource(fragmentShader1, 1, &shader.fragmentShaderSource1, NULL);
+	glShaderSource(fragmentShader1, 1, &mainFragmentShader, NULL);
 	glCompileShader(fragmentShader1);
 
 
@@ -135,7 +172,7 @@ int main(void)
 
 
 
-	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+
 
 
 
@@ -147,18 +184,25 @@ int main(void)
 
 		//Draw Calls
 
+		float timeValue = glfwGetTime();
+		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+		
+
+
 		//Judy->DrawCall OBJ1
 		glUseProgram(shaderProgram);
+		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
 		glBindVertexArray(VAO[0]);
 		glDrawElements(GL_TRIANGLES, sizeof(indices1), GL_UNSIGNED_INT, (void*)0);
 		glBindVertexArray(0);
 
 
 		//Judy->DrawCall OBJ2
-		glUseProgram(shaderProgram1);
-		glBindVertexArray(VAO[1]);
-		glDrawElements(GL_TRIANGLES, sizeof(indices1), GL_UNSIGNED_INT, (void*)0);
-		glBindVertexArray(0);
+		//glUseProgram(shaderProgram1);
+		//glBindVertexArray(VAO[1]);
+		//glDrawElements(GL_TRIANGLES, sizeof(indices1), GL_UNSIGNED_INT, (void*)0);
+		//glBindVertexArray(0);
 
 
 		/* Swap front and back buffers */

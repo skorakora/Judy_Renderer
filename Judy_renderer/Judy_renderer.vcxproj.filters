@@ -26,7 +26,7 @@
     <ClInclude Include="src\Globals.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\Shaders.h">
+    <ClInclude Include="src\RendererShaders.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
