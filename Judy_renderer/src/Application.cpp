@@ -43,28 +43,14 @@ int main(void)
 
 
 	float vertices1[] = {
-		 0.5f,  0.5f, 0.0f,  // top right
-		 0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
+		 -0.5f,  -0.5f, 0.0f,  1.0f,0.0f,0.0f,
+		 0.5f,  -0.5f, 0.0f,   0.0f,1.0f,0.0f,
+		 0.0f,  0.5f, 0.0f,   0.0f,0.0f,1.0f,
 	};
 	unsigned int indices1[] = {  // note that we start from 0!
-		0, 1, 3,   // first triangle
-		1, 2, 3,   // second triangle
-		2, 3, 0
+		0, 1, 2,   // first triangle
 	};
 
-	float vertices2[] = {
-	 0.2f,  0.4f, 0.0f,  // top right
-	 0.4f, -0.4f, 0.0f,  // bottom right
-	-0.4f, -0.4f, 0.0f,  // bottom left
-	-0.4f,  0.4f, 0.0f   // top left 
-	};
-	unsigned int indices2[] = {  // note that we start from 0!
-		0, 1, 3,   // first triangle
-		1, 2, 3,   // second triangle
-		2, 3, 0
-	};
 
 	
 
@@ -152,11 +138,13 @@ int main(void)
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices1), vertices1, GL_STATIC_DRAW);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO[0]);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices1), indices1, GL_STATIC_DRAW);
-	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)0);
 	glEnableVertexAttribArray(0);
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 6, (void*)(3*sizeof(float)));
+	glEnableVertexAttribArray(1);
 
 
-
+	/*
 	glBindVertexArray(VAO[1]);
 	glBindBuffer(GL_ARRAY_BUFFER, VBO[1]);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(vertices2), vertices2, GL_STATIC_DRAW);
@@ -165,7 +153,7 @@ int main(void)
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(float) * 3, (void*)0);
 	glEnableVertexAttribArray(0);
 
-
+	*/
 
 	
 	glUseProgram(shaderProgram);
@@ -186,13 +174,13 @@ int main(void)
 
 		float timeValue = glfwGetTime();
 		float greenValue = (sin(timeValue) / 2.0f) + 0.5f;
-		int vertexColorLocation = glGetUniformLocation(shaderProgram, "ourColor");
+		int vertexColorLocation = glGetUniformLocation(shaderProgram, "transform");
 		
 
 
 		//Judy->DrawCall OBJ1
 		glUseProgram(shaderProgram);
-		glUniform4f(vertexColorLocation, 0.0f, greenValue, 0.0f, 1.0f);
+		glUniform1f(vertexColorLocation, greenValue);
 		glBindVertexArray(VAO[0]);
 		glDrawElements(GL_TRIANGLES, sizeof(indices1), GL_UNSIGNED_INT, (void*)0);
 		glBindVertexArray(0);

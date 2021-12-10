@@ -33,21 +33,21 @@ void RendererShaders::LoadShaders()// loads shaders from default shader folder
 	std::string path("shaders");
 	for (const auto& p : fs::directory_iterator(path))
 	{
-		if (p.path().extension() == (".vrt"))
+		if (p.path().extension() == (".vert"))
 		{
 			std::string data;
 			std::ifstream file (p.path());
 			data = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 			VertexShaders.insert(std::make_pair(p.path().stem().string(), data));
 		}
-		if (p.path().extension() == (".frg"))
+		if (p.path().extension() == (".frag"))
 		{
 			std::string data;
 			std::ifstream file(p.path());
 			data = std::string((std::istreambuf_iterator<char>(file)), std::istreambuf_iterator<char>());
 			FragmentShaders.insert(std::make_pair(p.path().stem().string(), data));
 		}
-		if (p.path().extension() == (".gmr"))
+		if (p.path().extension() == (".geom"))
 		{
 			std::string data;
 			std::ifstream file(p.path());
